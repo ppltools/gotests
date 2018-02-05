@@ -1,0 +1,5 @@
+package: github.com/cweill/gotests
+import:
+- package: golang.org/x/tools
+  subpackages:
+  - imports
