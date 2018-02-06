@@ -14,9 +14,10 @@ import (
 )
 
 const newFilePerm os.FileMode = 0644
-const msgFmt string = "\033[%sm%s\033[m%s\n"
-const msgInfo string = "0;32"
-const msgError string = "0;31"
+const msgFmt = "\033[%sm%s\033[m%s\n"
+const msgInfo = "0;32"
+const msgWarn = "0;33"
+const msgError = "0;31"
 
 // Set of options to use when generating tests.
 type Options struct {
@@ -93,7 +94,7 @@ func generateTests(out io.Writer, path string, writeOutput bool, opt *gotests.Op
 		return
 	}
 	if len(gts) == 0 {
-		fmt.Fprintf(out, msgFmt, msgInfo, "[INFO]\t", "-> no tests generated for: " + path)
+		fmt.Fprintf(out, msgFmt, msgWarn, "[WARN]\t", "-> no tests generated for: " + path)
 		return
 	}
 	for _, t := range gts {
