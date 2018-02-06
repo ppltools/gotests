@@ -21,11 +21,13 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+	"runtime"
 )
 
 func bindataRead(data []byte, name string, file bool) ([]byte, error) {
 	if file {
-		f, err := os.Open(fmt.Sprintf("%s%s", "internal/render/", name))
+		_, file, _, _ := runtime.Caller(0)
+		f, err := os.Open(fmt.Sprintf("%s/%s", filepath.Dir(filepath.Dir(file)), name))
 		if err != nil {
 			return nil, fmt.Errorf("Open %q: %v", name, err)
 		}
