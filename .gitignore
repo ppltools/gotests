@@ -1,5 +1,8 @@
 .DS_Store
 glide.lock
+gotests
+*_test.go
+*.swp
 
 .idea/
 vendor/

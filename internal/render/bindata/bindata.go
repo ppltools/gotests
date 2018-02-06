@@ -23,7 +23,20 @@ import (
 	"time"
 )
 
-func bindataRead(data []byte, name string) ([]byte, error) {
+func bindataRead(data []byte, name string, file bool) ([]byte, error) {
+	if file {
+		f, err := os.Open(fmt.Sprintf("%s%s", "internal/render/", name))
+		if err != nil {
+			return nil, fmt.Errorf("Open %q: %v", name, err)
+		}
+
+		buf, err := ioutil.ReadAll(f)
+		if err != nil {
+			return nil, fmt.Errorf("Read %q: %v", name, err)
+		}
+		return buf, nil
+	}
+
 	gz, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
 		return nil, fmt.Errorf("Read %q: %v", name, err)
@@ -80,6 +93,7 @@ func templatesCallTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesCallTmpl,
 		"templates/call.tmpl",
+		false,
 	)
 }
 
@@ -100,6 +114,7 @@ func templatesFunctionTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesFunctionTmpl,
 		"templates/function.tmpl",
+		true,
 	)
 }
 
@@ -120,6 +135,7 @@ func templatesHeaderTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesHeaderTmpl,
 		"templates/header.tmpl",
+		false,
 	)
 }
 
@@ -140,6 +156,7 @@ func templatesInlineTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesInlineTmpl,
 		"templates/inline.tmpl",
+		false,
 	)
 }
 
@@ -160,6 +177,7 @@ func templatesInputsTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesInputsTmpl,
 		"templates/inputs.tmpl",
+		false,
 	)
 }
 
@@ -180,6 +198,7 @@ func templatesMessageTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesMessageTmpl,
 		"templates/message.tmpl",
+		false,
 	)
 }
 
@@ -200,6 +219,7 @@ func templatesResultsTmplBytes() ([]byte, error) {
 	return bindataRead(
 		_templatesResultsTmpl,
 		"templates/results.tmpl",
+		false,
 	)
 }
 
