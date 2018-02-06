@@ -14,6 +14,9 @@ import (
 )
 
 const newFilePerm os.FileMode = 0644
+const msgFmt string = "\033[%sm%s\033[m%s\n"
+const msgInfo string = "0;32"
+const msgError string = "0;31"
 
 // Set of options to use when generating tests.
 type Options struct {
@@ -39,7 +42,7 @@ func Run(out io.Writer, args []string, opts *Options) {
 		return
 	}
 	if len(args) == 0 {
-		fmt.Fprintln(out, "Please specify a file or directory containing the source")
+		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> please specify a file or directory containing the source")
 		return
 	}
 	for _, path := range args {
@@ -49,17 +52,17 @@ func Run(out io.Writer, args []string, opts *Options) {
 
 func parseOptions(out io.Writer, opt *Options) *gotests.Options {
 	if opt.OnlyFuncs == "" && opt.ExclFuncs == "" && !opt.ExportedFuncs && !opt.AllFuncs {
-		fmt.Fprintln(out, "Please specify either the -only, -excl, -export, or -all flag")
+		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> please specify either the -only, -excl, -export, or -all flag")
 		return nil
 	}
 	onlyRE, err := parseRegexp(opt.OnlyFuncs)
 	if err != nil {
-		fmt.Fprintln(out, "Invalid -only regex:", err)
+		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> invalid -only regex:" + err.Error())
 		return nil
 	}
 	exclRE, err := parseRegexp(opt.ExclFuncs)
 	if err != nil {
-		fmt.Fprintln(out, "Invalid -excl regex:", err)
+		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> invalid -excl regex:" + err.Error())
 		return nil
 	}
 	return &gotests.Options{
@@ -86,11 +89,11 @@ func parseRegexp(s string) (*regexp.Regexp, error) {
 func generateTests(out io.Writer, path string, writeOutput bool, opt *gotests.Options) {
 	gts, err := gotests.GenerateTests(path, opt)
 	if err != nil {
-		fmt.Fprintln(out, err.Error())
+		fmt.Fprintf(out, err.Error())
 		return
 	}
 	if len(gts) == 0 {
-		fmt.Fprintln(out, "No tests generated for", path)
+		fmt.Fprintf(out, msgFmt, msgInfo, "[INFO]\t", "-> no tests generated for: " + path)
 		return
 	}
 	for _, t := range gts {
@@ -101,12 +104,12 @@ func generateTests(out io.Writer, path string, writeOutput bool, opt *gotests.Op
 func outputTest(out io.Writer, t *gotests.GeneratedTest, writeOutput bool) {
 	if writeOutput {
 		if err := ioutil.WriteFile(t.Path, t.Output, newFilePerm); err != nil {
-			fmt.Fprintln(out, err)
+			fmt.Fprintf(out, msgFmt, msgError, err)
 			return
 		}
 	}
 	for _, t := range t.Functions {
-		fmt.Fprintln(out, "Generated", t.TestName())
+		fmt.Fprintf(out, msgFmt, msgInfo, "[INFO]\t", "-> generated: " + t.TestName())
 	}
 	if !writeOutput {
 		out.Write(t.Output)

@@ -2,10 +2,12 @@
 {{- $f := .}}
 
 func {{.TestName}}(t *testing.T) {
-    {{- if .AllowError -}}
-        should := assert.New(t)
-    {{- else -}}
-        should := require.New(t)
+    {{- if or .ReturnsError (ne (len .TestResults) 0) }}
+        {{- if .AllowError -}}
+            should := assert.New(t)
+        {{- else -}}
+            should := require.New(t)
+        {{- end -}}
     {{- end -}}
 	{{- with .Receiver}}
 		{{- if .IsStruct}}
