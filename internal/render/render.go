@@ -96,14 +96,16 @@ func Header(w io.Writer, h *models.Header) error {
 	return err
 }
 
-func TestFunction(w io.Writer, f *models.Function, printInputs bool, subtests bool) error {
+func TestFunction(w io.Writer, f *models.Function, printInputs bool, subtests bool, allowError bool) error {
 	return tmpls.ExecuteTemplate(w, "function", struct {
 		*models.Function
 		PrintInputs bool
 		Subtests    bool
+		AllowError  bool
 	}{
 		Function:    f,
 		PrintInputs: printInputs,
 		Subtests:    subtests,
+		AllowError:  allowError,
 	})
 }

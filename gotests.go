@@ -23,6 +23,7 @@ type Options struct {
 	Exported    bool                  // Include only exported methods
 	PrintInputs bool                  // Print function parameters in error messages
 	Subtests    bool                  // Print tests using Go 1.7 subtests
+	AllowError  bool				  // Allow error
 	Importer    func() types.Importer // A custom importer.
 }
 
@@ -116,6 +117,7 @@ func generateTest(src models.Path, files []models.Path, opt *Options) (*Generate
 	b, err := output.Process(h, funcs, &output.Options{
 		PrintInputs: opt.PrintInputs,
 		Subtests:    opt.Subtests,
+		AllowError:  opt.AllowError,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("output.Process: %v", err)

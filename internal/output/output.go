@@ -17,6 +17,7 @@ import (
 type Options struct {
 	PrintInputs bool
 	Subtests    bool
+	AllowError  bool
 }
 
 func Process(head *models.Header, funcs []*models.Function, opt *Options) ([]byte, error) {
@@ -48,7 +49,7 @@ func writeTests(w io.Writer, head *models.Header, funcs []*models.Function, opt 
 		return fmt.Errorf("render.Header: %v", err)
 	}
 	for _, fun := range funcs {
-		if err := render.TestFunction(b, fun, opt.PrintInputs, opt.Subtests); err != nil {
+		if err := render.TestFunction(b, fun, opt.PrintInputs, opt.Subtests, opt.AllowError); err != nil {
 			return fmt.Errorf("render.TestFunction: %v", err)
 		}
 	}

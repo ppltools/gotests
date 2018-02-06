@@ -41,6 +41,7 @@ var (
 	allFuncs      = flag.Bool("all", false, "generate tests for all functions and methods")
 	printInputs   = flag.Bool("i", false, "print test inputs in error messages")
 	writeOutput   = flag.Bool("w", false, "write output to (test) files instead of stdout")
+	allowError    = flag.Bool("allow", false, "allow error during test")
 )
 
 // nosubtests is always set to default value of true when Go < 1.7.
@@ -60,5 +61,6 @@ func main() {
 		PrintInputs:   *printInputs,
 		Subtests:      !nosubtests,
 		WriteOutput:   *writeOutput,
+		AllowError:    *allowError,
 	})
 }
