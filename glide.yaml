@@ -1,4 +1,4 @@
-package: github.com/cweill/gotests
+package: github.com/ppltools/gotests
 import:
 - package: golang.org/x/tools
   subpackages:

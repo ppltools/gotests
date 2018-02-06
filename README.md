@@ -1,12 +1,12 @@
-# gotests [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/cweill/gotests/blob/master/LICENSE) [![godoc](https://img.shields.io/badge/go-documentation-blue.svg)](https://godoc.org/github.com/cweill/gotests) [![Build Status](https://travis-ci.org/cweill/gotests.svg?branch=master)](https://travis-ci.org/cweill/gotests) [![Coverage Status](https://coveralls.io/repos/github/cweill/gotests/badge.svg?branch=master)](https://coveralls.io/github/cweill/gotests?branch=master) [![codebeat badge](https://codebeat.co/badges/7ef052e3-35ff-4cab-88f9-e13393c8ab35)](https://codebeat.co/projects/github-com-cweill-gotests) [![Go Report Card](https://goreportcard.com/badge/github.com/cweill/gotests)](https://goreportcard.com/report/github.com/cweill/gotests)
+# gotests [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/ppltools/gotests/blob/master/LICENSE) [![godoc](https://img.shields.io/badge/go-documentation-blue.svg)](https://godoc.org/github.com/ppltools/gotests) [![Build Status](https://travis-ci.org/ppltools/gotests.svg?branch=master)](https://travis-ci.org/ppltools/gotests) [![Coverage Status](https://coveralls.io/repos/github/ppltools/gotests/badge.svg?branch=master)](https://coveralls.io/github/ppltools/gotests?branch=master) [![codebeat badge](https://codebeat.co/badges/7ef052e3-35ff-4cab-88f9-e13393c8ab35)](https://codebeat.co/projects/github-com-ppltools-gotests) [![Go Report Card](https://goreportcard.com/badge/github.com/ppltools/gotests)](https://goreportcard.com/report/github.com/ppltools/gotests)
 
 `gotests` makes writing Go tests easy. It's a Golang commandline tool that generates [table driven tests](https://github.com/golang/go/wiki/TableDrivenTests) based on its target source files' function and method signatures. Any new dependencies in the test files are automatically imported.
 
 ## Demo
 
-The following shows `gotests` in action using the [official Sublime Text 3 plugin](https://github.com/cweill/GoTests-Sublime). Plugins also exist for [Emacs](https://github.com/damienlevin/GoTests-Emacs), [Vim](https://github.com/buoto/gotests-vim) and [Atom Editor](https://atom.io/packages/gotests).
+The following shows `gotests` in action using the [official Sublime Text 3 plugin](https://github.com/ppltools/GoTests-Sublime). Plugins also exist for [Emacs](https://github.com/damienlevin/GoTests-Emacs), [Vim](https://github.com/buoto/gotests-vim) and [Atom Editor](https://atom.io/packages/gotests).
 
-![demo](https://github.com/cweill/GoTests-Sublime/blob/master/gotests.gif)
+![demo](https://github.com/ppltools/GoTests-Sublime/blob/master/gotests.gif)
 
 ## Installation
 
@@ -15,7 +15,7 @@ __Minimum Go version:__ Go 1.6
 Use [`go get`](https://golang.org/cmd/go/#hdr-Download_and_install_packages_and_dependencies) to install and update:
 
 ```sh
-$ go get -u github.com/cweill/gotests/...
+$ go get -u github.com/ppltools/gotests/...
 ```
 
 ## Usage
