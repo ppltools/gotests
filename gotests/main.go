@@ -29,7 +29,6 @@ package main
 
 import (
 	"flag"
-	"os"
 
 	"github.com/ppltools/gotests/gotests/process"
 
@@ -54,9 +53,8 @@ var nosubtests = true
 func main() {
 	flag.Parse()
 	args := flag.Args()
-	cmsg.Default.Stderr = os.Stderr
 
-	process.Run(args, &process.Options{
+	process.Run(cmsg.Default.Stderr, args, &process.Options{
 		OnlyFuncs:     *onlyFuncs,
 		ExclFuncs:     *exclFuncs,
 		ExportedFuncs: *exportedFuncs,

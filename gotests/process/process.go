@@ -10,6 +10,8 @@ import (
 
 	"github.com/ppltools/gotests"
 
+	"io"
+
 	"github.com/ppltools/cmsg"
 )
 
@@ -30,7 +32,9 @@ type Options struct {
 // Generates tests for the Go files defined in args with the given options.
 // Logs information and errors to out. By default outputs generated tests to
 // out unless specified by opt.
-func Run(args []string, opts *Options) {
+func Run(out io.Writer, args []string, opts *Options) {
+	cmsg.Default.Stderr = out
+
 	if opts == nil {
 		opts = &Options{}
 	}
