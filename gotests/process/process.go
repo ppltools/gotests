@@ -4,20 +4,16 @@
 package process
 
 import (
-	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"regexp"
 
 	"github.com/ppltools/gotests"
+
+	"github.com/ppltools/cmsg"
 )
 
 const newFilePerm os.FileMode = 0644
-const msgFmt = "\033[%sm%s\033[m%s\n"
-const msgInfo = "0;32"
-const msgWarn = "0;33"
-const msgError = "0;31"
 
 // Set of options to use when generating tests.
 type Options struct {
@@ -34,37 +30,33 @@ type Options struct {
 // Generates tests for the Go files defined in args with the given options.
 // Logs information and errors to out. By default outputs generated tests to
 // out unless specified by opt.
-func Run(out io.Writer, args []string, opts *Options) {
+func Run(args []string, opts *Options) {
 	if opts == nil {
 		opts = &Options{}
 	}
-	opt := parseOptions(out, opts)
+	opt := parseOptions(opts)
 	if opt == nil {
 		return
 	}
 	if len(args) == 0 {
-		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> please specify a file or directory containing the source")
-		return
+		cmsg.Die("-> please specify a file or directory containing the source")
 	}
 	for _, path := range args {
-		generateTests(out, path, opts.WriteOutput, opt)
+		generateTests(path, opts.WriteOutput, opt)
 	}
 }
 
-func parseOptions(out io.Writer, opt *Options) *gotests.Options {
+func parseOptions(opt *Options) *gotests.Options {
 	if opt.OnlyFuncs == "" && opt.ExclFuncs == "" && !opt.ExportedFuncs && !opt.AllFuncs {
-		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> please specify either the -only, -excl, -export, or -all flag")
-		return nil
+		cmsg.Die("-> please specify either the -only, -excl, -export, or -all flag")
 	}
 	onlyRE, err := parseRegexp(opt.OnlyFuncs)
 	if err != nil {
-		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> invalid -only regex:" + err.Error())
-		return nil
+		cmsg.Die("-> invalid -only regex: %s", err)
 	}
 	exclRE, err := parseRegexp(opt.ExclFuncs)
 	if err != nil {
-		fmt.Fprintf(out, msgFmt, msgError, "[ERROR]\t", "-> invalid -excl regex:" + err.Error())
-		return nil
+		cmsg.Die("-> invalid -excl regex: %s", err)
 	}
 	return &gotests.Options{
 		Only:        onlyRE,
@@ -87,32 +79,26 @@ func parseRegexp(s string) (*regexp.Regexp, error) {
 	return re, nil
 }
 
-func generateTests(out io.Writer, path string, writeOutput bool, opt *gotests.Options) {
+func generateTests(path string, writeOutput bool, opt *gotests.Options) {
 	gts, err := gotests.GenerateTests(path, opt)
 	if err != nil {
-		fmt.Fprintf(out, err.Error())
-		return
+		cmsg.Die("-> generate test failed: %s", err)
 	}
 	if len(gts) == 0 {
-		fmt.Fprintf(out, msgFmt, msgWarn, "[WARN]\t", "-> no tests generated for: " + path)
-		return
+		cmsg.Warn("-> no tests generated for: %s", path)
 	}
 	for _, t := range gts {
-		outputTest(out, t, writeOutput)
+		outputTest(t, writeOutput)
 	}
 }
 
-func outputTest(out io.Writer, t *gotests.GeneratedTest, writeOutput bool) {
+func outputTest(t *gotests.GeneratedTest, writeOutput bool) {
 	if writeOutput {
 		if err := ioutil.WriteFile(t.Path, t.Output, newFilePerm); err != nil {
-			fmt.Fprintf(out, msgFmt, msgError, err)
-			return
+			cmsg.Die("-> write file %s failed: %s", t.Path, err)
 		}
 	}
 	for _, t := range t.Functions {
-		fmt.Fprintf(out, msgFmt, msgInfo, "[INFO]\t", "-> generated: " + t.TestName())
-	}
-	if !writeOutput {
-		out.Write(t.Output)
+		cmsg.Info("-> generated: %s", t.TestName())
 	}
 }
