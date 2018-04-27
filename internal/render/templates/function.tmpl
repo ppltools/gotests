@@ -70,7 +70,7 @@ func {{.TestName}}(t *testing.T) {
 			{{- if .ReturnsError}}
 				{{if .OnlyReturnsError}} err := {{template "call" $f}} {{end}}
 				should.Equal(err != nil, tt.wantErr,
-				    fmt.Sprintf("{{template "message" $f}} error = %v, wantErr %v", {{template "inputs" $f}} err, tt.wantErr))
+				    fmt.Sprintf("{{template "message" $f}} wantErr %v, error = %v", {{template "inputs" $f}} tt.wantErr, err))
 			{{- end}}
 			{{- range .TestResults}}
 				{{- if .IsWriter}}
@@ -81,7 +81,7 @@ func {{.TestName}}(t *testing.T) {
 					{{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
 				{{- end}}
 				should.Equal({{Got .}}, tt.{{Want .}},
-				    fmt.Sprintf("{{template "message" $f}} {{if $f.ReturnsMultiple}}{{Got .}} {{end}}= %v, want %v", {{template "inputs" $f}} {{Got .}}, tt.{{Want .}}))
+				    fmt.Sprintf("{{template "message" $f}} want %v, {{if $f.ReturnsMultiple}}{{Got .}} {{end}}= %v", {{template "inputs" $f}} tt.{{Want .}}, {{Got .}}))
 			{{- end}}
 		{{- if .Subtests }} }) {{- end -}}
 	}
