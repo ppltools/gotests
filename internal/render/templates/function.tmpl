@@ -69,7 +69,7 @@ func {{.TestName}}(t *testing.T) {
 			{{- end}}
 			{{- if .ReturnsError}}
 				{{if .OnlyReturnsError}} err := {{template "call" $f}} {{end}}
-				should.Equal(err != nil, tt.wantErr,
+				should.Equal(tt.wantErr, err != nil,
 				    fmt.Sprintf("{{template "message" $f}} wantErr %v, error = %v", {{template "inputs" $f}} tt.wantErr, err))
 			{{- end}}
 			{{- range .TestResults}}
@@ -80,7 +80,7 @@ func {{.TestName}}(t *testing.T) {
 				{{- else}}
 					{{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
 				{{- end}}
-				should.Equal({{Got .}}, tt.{{Want .}},
+				should.Equal(tt.{{Want .}}, {{Got .}},
 				    fmt.Sprintf("{{template "message" $f}} want %v, {{if $f.ReturnsMultiple}}{{Got .}} {{end}}= %v", {{template "inputs" $f}} tt.{{Want .}}, {{Got .}}))
 			{{- end}}
 		{{- if .Subtests }} }) {{- end -}}
